@@ -11,5 +11,16 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  backend:
+    build: ./backend/
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:root@database:5432/db_expenser
+      - PYTHONPATH=/app
+    depends_on:
+      - database
+
 volumes:
   postgres_data:
