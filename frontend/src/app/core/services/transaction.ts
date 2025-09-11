@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Api } from './api';
-import { Transaction, TransactionCreate, TransactionSummary, TransactionUpdate } from '../models';
+import { Transaction, TransactionCreate, TransactionSummary } from '../models';
 import { Observable } from 'rxjs';
 
 @Injectable({

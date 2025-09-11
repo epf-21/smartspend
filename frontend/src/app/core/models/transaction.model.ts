@@ -12,7 +12,9 @@ export interface Transaction extends TransactionData, BaseEntity {
   category_id: string;
 }
 
-export type TransactionResponse = Transaction;
+export interface TransactionCreate extends TransactionData {
+  category_id: string;
+}
 
 export interface TransactionSummary {
   total_expenses: number;
