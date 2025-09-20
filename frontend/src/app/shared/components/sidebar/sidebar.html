@@ -16,7 +16,10 @@
       @for (item of menuItems; track item.label) {
         <li>
           <a
+            [routerLink]="item.route"
+            (click)="onMenuItemClick(item)"
             class="flex items-center gap-4 px-6 py-3 mx-2 rounded-xl font-medium transition-all duration-200 group relative overflow-hidden"
+            [class]="getMenuItemsClass(item)"
           >
             <div
               class="absolute inset-0 bg-white/10 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"

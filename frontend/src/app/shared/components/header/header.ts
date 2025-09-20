@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import {
   LucideAngularModule,
   Menu,
@@ -8,7 +8,6 @@ import {
   Cog,
   LogOut,
 } from 'lucide-angular';
-import { Currency } from '../../../core/enums';
 
 @Component({
   selector: 'app-header',
@@ -23,9 +22,16 @@ export class Header {
   readonly Cog = Cog;
   readonly LogOut = LogOut;
 
-  selectedCurrency: Currency = Currency.BOB;
-  currencies = Object.values(Currency);
+  toggleSidebar = output<void>();
+
   isUserMenuOpen = false;
 
+  toggleUserMenu() {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  getUserInitials(): string {
+    return 'user name';
+  }
   logout(): void {}
 }
