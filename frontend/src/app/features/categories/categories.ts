@@ -3,12 +3,12 @@ import { LucideAngularModule, Pencil, Plus, Tag, Trash } from 'lucide-angular';
 import { CategoryServices } from '../../core/services/category';
 import { Category } from '../../core/models';
 import { Modal } from './modal/modal';
+import { CategoryCard } from './category-card/category-card';
 
 @Component({
   selector: 'app-categories',
-  imports: [LucideAngularModule, Modal],
+  imports: [LucideAngularModule, Modal, CategoryCard],
   templateUrl: './categories.html',
-  styles: ``,
 })
 export class CategoriesComponent {
   readonly Plus = Plus;
