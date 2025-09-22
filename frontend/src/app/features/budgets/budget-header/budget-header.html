@@ -1,0 +1,18 @@
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+  <div class="mb-4 lg:mb-0">
+    <div class="flex items-center gap-3 mb-2">
+      <i-lucide [img]="PiggyBank" class="w-8 h-8 text-indigo-600"></i-lucide>
+      <h1 class="text-3xl font-bold text-gray-900">Presupuestos</h1>
+    </div>
+    <p class="text-gray-600">Controla tus gastos estableciendo límites por categoría</p>
+  </div>
+  <button
+    (click)="onNewBudget()"
+    class="px-6 py-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-xl hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
+  >
+    <span class="flex items-center gap-2">
+      <i-lucide [img]="Plus"></i-lucide>
+      Nuevo Presupuesto
+    </span>
+  </button>
+</div>

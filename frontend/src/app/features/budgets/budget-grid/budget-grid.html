@@ -1,0 +1,21 @@
+@if (budgets().length === 0) {
+  <div class="text-center py-12">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+      <i-lucide [img]="Search" class="w-8 h-8 text-gray-400"></i-lucide>
+    </div>
+    <h3 class="text-xl font-semibold text-gray-900 mb-2">No hay presupuestos</h3>
+    <p class="text-gray-600 mb-4">
+      Crea tu primer presupuesto para comenzar a controlar tus gastos
+    </p>
+  </div>
+} @else {
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    @for (budget of budgets(); track budget.id) {
+      <app-budget-card
+        [budget]="budget"
+        (editClick)="onEditBudget($event)"
+        (deleteClick)="onDeleteBudget($event)"
+      ></app-budget-card>
+    }
+  </div>
+}

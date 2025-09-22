@@ -17,15 +17,15 @@ export class BudgetService {
     return this.api.get<Budget>(`budgets/${id}`);
   }
 
-  createButget(budget: BudgetCreate): Observable<Budget> {
+  createBudget(budget: BudgetCreate): Observable<Budget> {
     return this.api.post<Budget>('budgets', budget);
   }
 
-  updateButget(id: string, budget: BudgetCreate): Observable<Budget> {
+  updateBudget(id: string, budget: BudgetCreate): Observable<Budget> {
     return this.api.put(`budgets/${id}`, budget);
   }
 
-  deleteButget(id: string): Observable<DeleteMessage> {
+  deleteBudget(id: string): Observable<DeleteMessage> {
     return this.api.delete<DeleteMessage>(`budgets/${id}`);
   }
 

@@ -6,7 +6,6 @@ import { Category } from '../../../core/models';
   selector: 'app-category-card',
   imports: [LucideAngularModule],
   templateUrl: './category-card.html',
-  styles: ``,
 })
 export class CategoryCard {
   readonly Pencil = Pencil;
