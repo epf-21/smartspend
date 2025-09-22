@@ -49,3 +49,10 @@
     />
   </div>
 </div>
+
+<app-budget-modal
+  [isOpen]="isModalOpen()"
+  [budget]="selectedBudget()"
+  (onClose)="closeModal()"
+  (onSave)="onBudgetSaved($event)"
+></app-budget-modal>

@@ -16,7 +16,7 @@ export class BudgetGrid {
   deleteBudget = output<Budget>();
 
   onEditBudget(budget: Budget) {
-    this.deleteBudget.emit(budget);
+    this.editBudget.emit(budget);
   }
 
   onDeleteBudget(budget: Budget) {

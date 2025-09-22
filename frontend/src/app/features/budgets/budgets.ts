@@ -11,10 +11,11 @@ import { BudgetGrid } from './budget-grid/budget-grid';
 import { BudgetService } from '../../core/services/budget';
 import { Budget } from '../../core/models';
 import { CommonModule } from '@angular/common';
+import { BugetModal } from './budget-modal/budget-modal';
 
 @Component({
   selector: 'app-budgets',
-  imports: [CommonModule, LucideAngularModule, BudgetHeader, BudgetGrid],
+  imports: [CommonModule, LucideAngularModule, BudgetHeader, BudgetGrid, BugetModal],
   templateUrl: './budgets.html',
   styles: ``,
 })
@@ -59,7 +60,7 @@ export class BudgetsComponent {
 
   openCreateModal() {
     this.selectedBudget.set(null);
-    this.isModalOpen.set(false);
+    this.isModalOpen.set(true);
   }
 
   openEditModal(budget: Budget) {
