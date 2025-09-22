@@ -87,6 +87,13 @@ def delete_category(category_id: UUID, session: Session = Depends(get_db_session
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
         )
-    session.delete(category)
-    session.commit()
-    return {"message": "Category deleted successfully"}
+    try:
+        session.delete(category)
+        session.commit()
+        return {"message": "Category deleted successfully"}
+    except Exception as e:
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="An unexpected error occurred while deleting the category",
+        )

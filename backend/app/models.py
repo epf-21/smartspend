@@ -50,8 +50,12 @@ class User(SQLModel, table=True):
             onupdate=lambda: datetime.now(timezone.utc),
         )
     )
-    transactions: List["Transaction"] = Relationship(back_populates="user")
-    categories: List["Category"] = Relationship(back_populates="user")
+    transactions: List["Transaction"] = Relationship(
+        back_populates="user", cascade_delete=True
+    )
+    categories: List["Category"] = Relationship(
+        back_populates="user", cascade_delete=True
+    )
 
 
 class Category(SQLModel, table=True):
@@ -76,8 +80,12 @@ class Category(SQLModel, table=True):
         )
     )
     user: User | None = Relationship(back_populates="categories")
-    transactions: List["Transaction"] = Relationship(back_populates="category")
-    budgets: List["Budget"] = Relationship(back_populates="category")
+    transactions: List["Transaction"] = Relationship(
+        back_populates="category", cascade_delete=True
+    )
+    budgets: List["Budget"] = Relationship(
+        back_populates="category", cascade_delete=True
+    )
 
 
 class Transaction(SQLModel, table=True):
