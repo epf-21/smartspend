@@ -27,11 +27,11 @@ export class Api {
   }
 
   put<T>(endpoint: string, data: any): Observable<T> {
-    return this.httpClient.post<T>(`${this.baseUrl}/${endpoint}`, data);
+    return this.httpClient.put<T>(`${this.baseUrl}/${endpoint}`, data);
   }
 
   delete<T>(endpoint: string): Observable<T> {
-    return this.httpClient.delete<T>(`${(this, this.httpClient)}/${endpoint}`);
+    return this.httpClient.delete<T>(`${this.baseUrl}/${endpoint}`);
   }
 
   patch<T>(endpoint: string, data: any): Observable<T> {

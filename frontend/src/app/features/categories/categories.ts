@@ -44,6 +44,7 @@ export class CategoriesComponent {
 
   deleteCategory(category: Category) {
     if (confirm(`¿Estás seguro de que quieres eliminar la categoria "${category.name}"?`)) {
+      console.log('Entrando en la  funcion de eliminar');
       this.categoryServices.deleteCategory(category.id).subscribe({
         next: () => {
           this.categoryServices.getCategories().subscribe();
