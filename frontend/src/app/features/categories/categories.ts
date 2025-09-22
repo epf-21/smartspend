@@ -1,7 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { LucideAngularModule, Pencil, Plus, Tag, Trash } from 'lucide-angular';
 import { CategoryServices } from '../../core/services/category';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Category } from '../../core/models';
 import { Modal } from './modal/modal';
 
@@ -16,12 +15,28 @@ export class CategoriesComponent {
   readonly Tag = Tag;
   readonly Pencil = Pencil;
   readonly Trash = Trash;
+
   private categoryServices = inject(CategoryServices);
 
   isModalOpen = signal<boolean>(false);
   selectedCategory = signal<Category | null>(null);
 
-  categories = toSignal(this.categoryServices.getCategories(), { initialValue: [] as Category[] });
+  categories = signal<Category[]>([]);
+
+  constructor() {
+    this.loadCategories();
+  }
+
+  private loadCategories() {
+    this.categoryServices.getCategories().subscribe({
+      next: (categories) => {
+        this.categories.set(categories);
+      },
+      error: (error) => {
+        console.error('Error loading categories: ', error);
+      },
+    });
+  }
 
   openCreateModal() {
     this.selectedCategory.set(null);
@@ -39,15 +54,22 @@ export class CategoriesComponent {
   }
 
   onCategorySaved(savedCategory: Category) {
-    this.categoryServices.getCategories().subscribe((categories) => {});
+    if (this.selectedCategory()) {
+      this.categories.update((categories) =>
+        categories.map((cat) => (cat.id === savedCategory.id ? savedCategory : cat)),
+      );
+    } else {
+      this.categories.update((categories) => [...categories, savedCategory]);
+    }
   }
 
   deleteCategory(category: Category) {
     if (confirm(`¿Estás seguro de que quieres eliminar la categoria "${category.name}"?`)) {
-      console.log('Entrando en la  funcion de eliminar');
       this.categoryServices.deleteCategory(category.id).subscribe({
         next: () => {
-          this.categoryServices.getCategories().subscribe();
+          this.categories.update((categories) =>
+            categories.filter((cat) => cat.id !== category.id),
+          );
         },
         error: (error) => {
           console.error('Error deleting cateogory: ', error);
