@@ -91,3 +91,15 @@ def get_transsaction_summary_by_category(
         or 0
     )
     return {"total_expenses": abs(total_expenses)}
+
+
+@router.get(
+    "/transactions/category/{category_id}", response_model=list[TransactionResponse]
+)
+def get_transactions_by_category(
+    category_id: UUID, session: Session = Depends(get_db_session)
+):
+    transactions = session.exec(
+        select(Transaction).where(Transaction.category_id == category_id)
+    ).all()
+    return transactions
