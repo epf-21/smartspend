@@ -19,3 +19,11 @@ export interface TransactionCreate extends TransactionData {
 export interface TransactionSummary {
   total_expenses: number;
 }
+
+export interface TransactionFilters {
+  search: string;
+  category_id: string;
+  payment_method: string;
+  date_from: string;
+  date_to: string;
+}

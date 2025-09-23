@@ -17,7 +17,7 @@ export class TransactionServices {
     return this.api.get<Transaction>(`transactions/${id}`);
   }
 
-  createTrasaction(transaction: TransactionCreate): Observable<Transaction> {
+  createTransaction(transaction: TransactionCreate): Observable<Transaction> {
     return this.api.post<Transaction>('transactions', transaction);
   }
 
@@ -31,5 +31,9 @@ export class TransactionServices {
 
   getTransactionsSummaryWithCategory(id: string): Observable<TransactionSummary> {
     return this.api.get<TransactionSummary>(`category/${id}/summary`);
+  }
+
+  getTransactionsByCategory(categoryId: string): Observable<Transaction[]> {
+    return this.api.get<Transaction[]>(`transactions/category/${categoryId}`);
   }
 }

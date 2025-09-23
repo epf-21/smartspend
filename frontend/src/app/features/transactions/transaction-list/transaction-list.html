@@ -1,0 +1,87 @@
+@if (transactions().length === 0) {
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center">
+    <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+      <i-lucide [img]="ArrowUpDown" class="w-8 h-8 text-gray-400"></i-lucide>
+    </div>
+    <h3 class="text-xl font-semibold text-gray-900 mb-2">No hay transacciones</h3>
+    <p class="text-gray-600 mb-4">No se encontraron transacciones con los filtros aplicados</p>
+  </div>
+} @else {
+  <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+    <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+      <div class="grid grid-cols-12 gap-4 text-sm font-semibold text-gray-700">
+        <div class="col-span-3">Descripción</div>
+        <div class="col-span-2">Categoría</div>
+        <div class="col-span-2">Monto</div>
+        <div class="col-span-2">Método de Pago</div>
+        <div class="col-span-2">Fecha</div>
+        <div class="col-span-1">Acciones</div>
+      </div>
+    </div>
+
+    <div class="divide-y divide-gray-100">
+      @for (transaction of transactions(); track transaction.id) {
+        <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+          <div class="grid grid-cols-12 gap-4 items-center">
+            <div class="col-span-3">
+              <p class="text-sm font-medium text-gray-900 truncate">
+                {{ transaction.description }}
+              </p>
+            </div>
+
+            <div class="col-span-2">
+              @if (getCategoryById(transaction.category_id); as category) {
+                <div class="flex items-center gap-2">
+                  <span
+                    class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white text-sm font-medium"
+                    [style.background-color]="category.color"
+                  >
+                    {{ category.icon }}
+                  </span>
+                  <span class="text-sm text-gray-700 truncate">{{ category.name }}</span>
+                </div>
+              } @else {
+                <span class="text-sm text-gray-400">Sin categoría</span>
+              }
+            </div>
+
+            <div class="col-span-2">
+              <span class="text-sm font-semibold text-red-600">
+                -${{ transaction.amount | number: '1.2-2' }}
+              </span>
+            </div>
+
+            <div class="col-span-2">
+              <div class="flex items-center gap-2">
+                <i-lucide
+                  [img]="getPaymentMethodIcon(transaction.payment_method)"
+                  class="w-4 h-4 text-gray-500"
+                ></i-lucide>
+                <span class="text-sm text-gray-600">
+                  {{ getPaymentMethodLabel(transaction.payment_method) }}
+                </span>
+              </div>
+            </div>
+
+            <div class="col-span-2">
+              <span class="text-sm text-gray-600">
+                {{ formatDate(transaction.date) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200">
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-gray-600">
+          Mostrando {{ transactions().length }} transacciones
+        </span>
+        <span class="text-sm font-semibold text-gray-900">
+          Total: -${{ getTotalAmount() | number: '1.2-2' }}
+        </span>
+      </div>
+    </div>
+  </div>
+}
