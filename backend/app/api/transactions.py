@@ -76,3 +76,18 @@ def get_transaction_summary(user_id: UUID, session: Session = Depends(get_db_ses
     return {
         "total_expenses": abs(total_expenses),
     }
+
+
+@router.get("/transactions/category/{category_id}/summary")
+def get_transsaction_summary_by_category(
+    category_id: UUID, session: Session = Depends(get_db_session)
+):
+    total_expenses = (
+        session.exec(
+            select(func.sum(Transaction.amount)).where(
+                Transaction.category_id == category_id, Transaction.amount > 0
+            )
+        ).first()
+        or 0
+    )
+    return {"total_expenses": abs(total_expenses)}
