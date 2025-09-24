@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   LucideAngularModule,
   LucideIconData,
@@ -18,13 +18,22 @@ interface MenuItem {
   label: string;
   icon: LucideIconData;
   route: string;
-  isActive: boolean;
 }
 
 @Component({
   selector: 'app-sidebar',
-  imports: [LucideAngularModule, RouterLink],
+  imports: [LucideAngularModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
+  styles: `
+    .active-menu-item {
+      @apply text-white bg-white/20 shadow-lg;
+      transform: TransalateX(0.5rem);
+    }
+
+    .menu-item:hover {
+      @apply text-white bg-white/20;
+    }
+  `,
 })
 export class Sidebar {
   readonly Cog = Cog;
@@ -41,49 +50,39 @@ export class Sidebar {
       label: 'Dashboard',
       icon: LayoutDashboard,
       route: '/dashboard',
-      isActive: true,
     },
     {
       id: 'transactions',
       label: 'Transacciones',
       icon: BadgeDollarSign,
       route: '/transactions',
-      isActive: false,
     },
     {
       id: 'categories',
       label: 'Categorías',
       icon: ChartBarStacked,
       route: '/categories',
-      isActive: false,
     },
     {
       id: 'budgets',
       label: 'Presupuestos',
       icon: Wallet,
       route: '/budgets',
-      isActive: false,
     },
     {
       id: 'reports',
       label: 'Reportes',
       icon: FileChartColumn,
       route: '/reports',
-      isActive: false,
     },
   ];
 
   onMenuItemClick(item: MenuItem) {
-    this.menuItems.forEach((menuItem) => (menuItem.isActive = false));
-    item.isActive = true;
-
     this.menuItemSelected.emit(item.id);
+    this.onCloseSidebar();
   }
 
-  getMenuItemsClass(item: MenuItem) {
-    const baseClass = 'text-white/80 hover:text-white hover:bg-white/10';
-    const activeClass = 'text-white bg-white/20 shadow-lg transform translate-x-2';
-
-    return item.isActive ? activeClass : baseClass;
+  onCloseSidebar() {
+    this.closeSidebar.emit();
   }
 }

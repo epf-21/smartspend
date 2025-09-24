@@ -6,7 +6,10 @@
       <i-lucide [img]="FolderCog"></i-lucide>
       <span class="font-bold text-xl">SmartSpend</span>
     </div>
-    <button class="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors duration-200">
+    <button
+      (click)="onCloseSidebar()"
+      class="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
+    >
       <i-lucide [img]="X"></i-lucide>
     </button>
   </div>
@@ -17,20 +20,20 @@
         <li>
           <a
             [routerLink]="item.route"
+            routerLinkActive="active-menu-item"
+            [routerLinkActiveOptions]="{ exact: true }"
             (click)="onMenuItemClick(item)"
-            class="flex items-center gap-4 px-6 py-3 mx-2 rounded-xl font-medium transition-all duration-200 group relative overflow-hidden"
-            [class]="getMenuItemsClass(item)"
+            class="menu-item flex items-center gap-4 px-6 py-3 mx-2 rounded-xl font-medium transition-all duration-200 group relative overflow-hidden text-white/80 hover:text-white hover:bg-white/10"
+            #rla="routerLinkActive"
           >
             <div
               class="absolute inset-0 bg-white/10 rounded-xl scale-0 group-hover:scale-100 transition-transform duration-300 origin-center"
             ></div>
-
             <div class="relative z-10 text-xl">
               <i-lucide [img]="item.icon"></i-lucide>
             </div>
-
             <span class="relative z-10">{{ item.label }}</span>
-            @if (item.isActive) {
+            @if (rla.isActive) {
               <div
                 class="absolute right-4 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full"
               ></div>
@@ -43,12 +46,19 @@
     <div class="mt-8 pt-4 border-t border-white/20">
       <a
         routerLink="/settings"
-        class="flex items-center gap-4 px-6 py-3 mx-2 rounded-xl font-medium transition-all duration-200 group relative overflow-hidden text-white/80 hover:text-white hover:bg-white/10"
+        routerLinkActive="active-menu-item"
+        class="menu-item flex items-center gap-4 px-6 py-3 mx-2 rounded-xl font-medium transition-all duration-200 group relative overflow-hidden text-white/80 hover:text-white hover:bg-white/10"
+        #settingsRla="routerLinkActive"
       >
         <div class="relative z-10 text-xl">
           <i-lucide [img]="Cog"></i-lucide>
         </div>
         <span class="relative z-10">Configuración</span>
+        @if (settingsRla.isActive) {
+          <div
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 w-2 h-2 bg-white rounded-full"
+          ></div>
+        }
       </a>
     </div>
   </nav>
