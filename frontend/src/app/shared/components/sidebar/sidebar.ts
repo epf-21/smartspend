@@ -24,16 +24,6 @@ interface MenuItem {
   selector: 'app-sidebar',
   imports: [LucideAngularModule, RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
-  styles: `
-    .active-menu-item {
-      @apply text-white bg-white/20 shadow-lg;
-      transform: TransalateX(0.5rem);
-    }
-
-    .menu-item:hover {
-      @apply text-white bg-white/20;
-    }
-  `,
 })
 export class Sidebar {
   readonly Cog = Cog;

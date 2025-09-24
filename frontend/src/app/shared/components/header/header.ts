@@ -30,6 +30,9 @@ export class Header {
     this.isUserMenuOpen = !this.isUserMenuOpen;
   }
 
+  onToggleSidebar() {
+    this.toggleSidebar.emit();
+  }
   getUserInitials(): string {
     return 'user name';
   }
