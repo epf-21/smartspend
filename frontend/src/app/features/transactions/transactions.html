@@ -104,6 +104,15 @@
     <app-transaction-list
       [transactions]="filteredTransactions()"
       (editTransaction)="openEditModal($event)"
+      (deleteTransaction)="deleteTransaction($event)"
     />
   </div>
 </div>
+
+<app-transaction-modal
+  [isOpen]="isModalOpen()"
+  [transaction]="selectedTransaction()"
+  (onClose)="closeModal()"
+  (onSave)="onTransactionSaved($event)"
+>
+</app-transaction-modal>

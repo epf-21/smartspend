@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
-import { ArrowUpDown, Banknote, CreditCard, LucideAngularModule } from 'lucide-angular';
+import {
+  ArrowUpDown,
+  Banknote,
+  CreditCard,
+  LucideAngularModule,
+  Pencil,
+  Trash2,
+} from 'lucide-angular';
 import { CategoryServices } from '../../../core/services/category';
 import { Category, Transaction } from '../../../core/models';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -16,12 +23,15 @@ export class TransactionList {
   readonly CreditCard = CreditCard;
   readonly Banknote = Banknote;
   readonly ArrowUpDown = ArrowUpDown;
+  readonly Trash2 = Trash2;
+  readonly Pencil = Pencil;
 
   private categoryService = inject(CategoryServices);
 
   transactions = input.required<Transaction[]>();
 
   editTransaction = output<Transaction>();
+  deleteTransaction = output<Transaction>();
 
   categories = toSignal(this.categoryService.getCategories(), { initialValue: [] as Category[] });
 
@@ -29,9 +39,18 @@ export class TransactionList {
     return this.transactions().reduce((total, transaction) => total + transaction.amount, 0);
   });
 
+  onEdit(transaction: Transaction) {
+    this.editTransaction.emit(transaction);
+  }
+
+  onDelete(transaction: Transaction) {
+    this.deleteTransaction.emit(transaction);
+  }
+
   getCategoryById(categoryId: string) {
     return this.categories().find((cat) => cat.id === categoryId);
   }
+
   getPaymentMethodIcon(method: PaymentMethod) {
     const icons = {
       [PaymentMethod.CASH]: Banknote,

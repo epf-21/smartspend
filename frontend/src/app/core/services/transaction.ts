@@ -1,6 +1,12 @@
 import { inject, Injectable } from '@angular/core';
 import { Api } from './api';
-import { Transaction, TransactionCreate, TransactionSummary } from '../models';
+import {
+  DeleteMessage,
+  Transaction,
+  TransactionCreate,
+  TransactionSummary,
+  TransactionUpdate,
+} from '../models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -19,6 +25,14 @@ export class TransactionServices {
 
   createTransaction(transaction: TransactionCreate): Observable<Transaction> {
     return this.api.post<Transaction>('transactions', transaction);
+  }
+
+  updateTransanction(id: string, transaction: TransactionUpdate): Observable<Transaction> {
+    return this.api.put<Transaction>(`transactions/${id}`, transaction);
+  }
+
+  deleteTransaction(id: string): Observable<DeleteMessage> {
+    return this.api.delete<DeleteMessage>(`transactions/${id}`);
   }
 
   getTransactionsByUser(id: string): Observable<Transaction> {

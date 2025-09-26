@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Api } from './api';
 import { Observable } from 'rxjs';
-import { Budget, BudgetCreate, DeleteMessage } from '../models';
+import { Budget, BudgetCreate, BudgetUpdate, DeleteMessage } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +21,7 @@ export class BudgetService {
     return this.api.post<Budget>('budgets', budget);
   }
 
-  updateBudget(id: string, budget: BudgetCreate): Observable<Budget> {
+  updateBudget(id: string, budget: BudgetUpdate): Observable<Budget> {
     return this.api.put(`budgets/${id}`, budget);
   }
 

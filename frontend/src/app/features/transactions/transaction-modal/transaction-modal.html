@@ -1,1 +1,192 @@
-<p>transaction-modal works!</p>
+@if (isOpen()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+    <div
+      class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-100"
+    >
+      <div class="flex items-center justify-between p-6 border-b border-gray-200">
+        <h2 class="text-2xl font-bold text-gray-900">
+          {{ isEditing() ? 'Editar Transacción' : 'Nueva Transacción' }}
+        </h2>
+        <button
+          (click)="closeModal()"
+          class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+        >
+          <i-lucide [img]="X" class="w-5 h-5"></i-lucide>
+        </button>
+      </div>
+
+      <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="p-6 space-y-6">
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+            <i-lucide [img]="FileText" class="w-4 h-4 inline mr-1"></i-lucide>
+            Descripción *
+          </label>
+          <input
+            id="description"
+            type="text"
+            formControlName="description"
+            placeholder="Ej: Almuerzo en restaurante, Gasolina, etc."
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+            [class.border-red-300]="
+              transactionForm.get('description')?.invalid &&
+              transactionForm.get('description')?.touched
+            "
+          />
+          @if (
+            transactionForm.get('description')?.invalid &&
+            transactionForm.get('description')?.touched
+          ) {
+            <p class="mt-1 text-sm text-red-600">La descripción es requerida</p>
+          }
+        </div>
+
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700 mb-2">
+            <i-lucide [img]="DollarSign" class="w-4 h-4 inline mr-1"></i-lucide>
+            Monto *
+          </label>
+          <input
+            id="amount"
+            type="number"
+            step="0.01"
+            min="0"
+            formControlName="amount"
+            placeholder="0.00"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+            [class.border-red-300]="
+              transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched
+            "
+          />
+          @if (transactionForm.get('amount')?.invalid && transactionForm.get('amount')?.touched) {
+            <p class="mt-1 text-sm text-red-600">El monto debe ser mayor a 0</p>
+          }
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">
+              Categoría *
+            </label>
+            <select
+              id="category_id"
+              formControlName="category_id"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+              [class.border-red-300]="
+                transactionForm.get('category_id')?.invalid &&
+                transactionForm.get('category_id')?.touched
+              "
+            >
+              <option value="">Selecciona una categoría</option>
+              @for (category of categories(); track category.id) {
+                <option [value]="category.id">{{ category.icon }} {{ category.name }}</option>
+              }
+            </select>
+            @if (
+              transactionForm.get('category_id')?.invalid &&
+              transactionForm.get('category_id')?.touched
+            ) {
+              <p class="mt-1 text-sm text-red-600">La categoría es requerida</p>
+            }
+          </div>
+
+          <div>
+            <label for="date" class="block text-sm font-medium text-gray-700 mb-2">
+              <i-lucide [img]="Calendar" class="w-4 h-4 inline mr-1"></i-lucide>
+              Fecha *
+            </label>
+            <input
+              id="date"
+              type="date"
+              formControlName="date"
+              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+              [class.border-red-300]="
+                transactionForm.get('date')?.invalid && transactionForm.get('date')?.touched
+              "
+            />
+            @if (transactionForm.get('date')?.invalid && transactionForm.get('date')?.touched) {
+              <p class="mt-1 text-sm text-red-600">La fecha es requerida</p>
+            }
+          </div>
+        </div>
+
+        <div>
+          <label for="payment_method" class="block text-sm font-medium text-gray-700 mb-2">
+            <i-lucide [img]="CreditCard" class="w-4 h-4 inline mr-1"></i-lucide>
+            Método de Pago *
+          </label>
+          <select
+            id="payment_method"
+            formControlName="payment_method"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+            [class.border-red-300]="
+              transactionForm.get('payment_method')?.invalid &&
+              transactionForm.get('payment_method')?.touched
+            "
+          >
+            <option value="">Selecciona un método</option>
+            <option [value]="PaymentMethod.CASH">💵 Efectivo</option>
+            <option [value]="PaymentMethod.CREDIT_CARD">💳 Tarjeta de Crédito</option>
+            <option [value]="PaymentMethod.DEBIT_CARD">💳 Tarjeta de Débito</option>
+            <option [value]="PaymentMethod.TRANSFER">🏦 Transferencia</option>
+            <option [value]="PaymentMethod.OTHER">📱 Otro</option>
+          </select>
+          @if (
+            transactionForm.get('payment_method')?.invalid &&
+            transactionForm.get('payment_method')?.touched
+          ) {
+            <p class="mt-1 text-sm text-red-600">El método de pago es requerido</p>
+          }
+        </div>
+
+        <!-- Preview -->
+        @if (transactionForm.get('amount')?.value && transactionForm.get('description')?.value) {
+          <div class="border border-gray-200 rounded-xl p-4 bg-gray-50">
+            <p class="text-sm font-medium text-gray-700 mb-3">Vista previa:</p>
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-semibold text-gray-900">
+                  {{ transactionForm.get('description')?.value }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  {{ formatDate(transactionForm.get('date')?.value) }}
+                </p>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-bold text-red-600">
+                  -${{ transactionForm.get('amount')?.value | number: '1.2-2' }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  {{ getPaymentMethodLabel(transactionForm.get('payment_method')?.value) }}
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+
+        <div class="flex gap-3 pt-4 border-t border-gray-200">
+          <button
+            type="button"
+            (click)="closeModal()"
+            class="flex-1 px-4 py-3 text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors duration-200 font-medium"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            [disabled]="transactionForm.invalid || isLoading()"
+            class="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium flex items-center justify-center gap-2"
+          >
+            @if (isLoading()) {
+              <div
+                class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+              ></div>
+            } @else {
+              <i-lucide [img]="Save" class="w-4 h-4"></i-lucide>
+            }
+            {{ isEditing() ? 'Actualizar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

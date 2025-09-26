@@ -16,6 +16,10 @@ export interface TransactionCreate extends TransactionData {
   category_id: string;
 }
 
+export interface TransactionUpdate extends Partial<TransactionData> {
+  category_id?: string;
+}
+
 export interface TransactionSummary {
   total_expenses: number;
 }

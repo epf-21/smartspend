@@ -6,6 +6,7 @@ import { TransactionServices } from '../../core/services/transaction';
 import { Transaction, TransactionFilters } from '../../core/models';
 import { TransactionList } from './transaction-list/transaction-list';
 import { CommonModule } from '@angular/common';
+import { TransactionModal } from './transaction-modal/transaction-modal';
 
 @Component({
   selector: 'app-transactions',
@@ -15,6 +16,7 @@ import { CommonModule } from '@angular/common';
     TransactionsHeader,
     TransactionsFilters,
     TransactionList,
+    TransactionModal,
   ],
   templateUrl: './transactions.html',
   styles: ``,
@@ -132,6 +134,25 @@ export class TransactionsComponent {
       );
     } else {
       this.transactions.update((transactions) => [savedTransaction, ...transactions]);
+    }
+  }
+
+  deleteTransaction(transaction: Transaction) {
+    if (
+      confirm(
+        `¿Estás seguro de que quieres eliminar esta transaccion: "${transaction.description}"?`,
+      )
+    ) {
+      this.transactionService.deleteTransaction(transaction.id).subscribe({
+        next: () => {
+          this.transactions.update((transactions) =>
+            transactions.filter((t) => t.id !== transaction.id),
+          );
+        },
+        error: (error) => {
+          console.error('Error deleting transaction: ', error);
+        },
+      });
     }
   }
 }
