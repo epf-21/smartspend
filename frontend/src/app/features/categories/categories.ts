@@ -1,18 +1,18 @@
 import { Component, inject, signal } from '@angular/core';
-import { LucideAngularModule, Pencil, Plus, Tag, Trash } from 'lucide-angular';
+import { LucideAngularModule, Pencil, Plus, Trash } from 'lucide-angular';
 import { CategoryServices } from '../../core/services/category';
 import { Category } from '../../core/models';
 import { Modal } from './modal/modal';
-import { CategoryCard } from './category-card/category-card';
+import { CategoryHeader } from './category-header/category-header';
+import { CategoryGrid } from './category-grid/category-grid';
 
 @Component({
   selector: 'app-categories',
-  imports: [LucideAngularModule, Modal, CategoryCard],
+  imports: [LucideAngularModule, Modal, CategoryGrid, CategoryHeader],
   templateUrl: './categories.html',
 })
 export class CategoriesComponent {
   readonly Plus = Plus;
-  readonly Tag = Tag;
   readonly Pencil = Pencil;
   readonly Trash = Trash;
 

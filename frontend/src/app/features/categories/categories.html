@@ -1,40 +1,13 @@
 <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6 pt-24">
   <div class="max-w-7xl mx-auto">
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
-      <div class="mb-4 lg:mb-0">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Categorías</h1>
-        <p class="text-gray-600">Organiza tus transacciones por categorías</p>
-      </div>
-
-      <button
-        (click)="openCreateModal()"
-        class="px-6 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-semibold rounded-xl hover:from-indigo-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-      >
-        <span class="flex items-center gap-2">
-          <i-lucide [img]="Plus"></i-lucide>
-          Nueva Categoría
-        </span>
-      </button>
-    </div>
-
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      @for (category of categories(); track category.id) {
-        <app-category-card
-          [category]="category"
-          (editClick)="openEditModal($event)"
-          (deleteClick)="deleteCategory($event)"
-        ></app-category-card>
-      }
-    </div>
+    <app-category-header (newCategoryClick)="openCreateModal()"> </app-category-header>
+    <app-category-grid
+      [categories]="categories()"
+      (editCategory)="openEditModal($event)"
+      (deleteCategory)="deleteCategory($event)"
+    ></app-category-grid>
   </div>
 </div>
-
-<button
-  (click)="openCreateModal()"
-  class="fixed bottom-8 right-8 w-16 h-16 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-full shadow-2xl hover:shadow-indigo-500/25 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 transition-all duration-200 z-50 flex items-center justify-center"
->
-  <i-lucide [img]="Tag"></i-lucide>
-</button>
 
 <app-modal
   [isOpen]="isModalOpen()"
