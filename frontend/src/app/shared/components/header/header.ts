@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, HostListener, output, signal } from '@angular/core';
 import {
   LucideAngularModule,
   Menu,
@@ -24,17 +24,25 @@ export class Header {
 
   toggleSidebar = output<void>();
 
-  isUserMenuOpen = false;
+  isUserMenuOpen = signal<boolean>(false);
 
-  toggleUserMenu() {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('[aria-label="User menu"]') && !target.closest('.absolute')) {
+      this.isUserMenuOpen.set(false);
+    }
   }
 
   onToggleSidebar() {
     this.toggleSidebar.emit();
   }
-  getUserInitials(): string {
-    return 'user name';
+
+  toggleUserMenu() {
+    this.isUserMenuOpen.update((isOpen) => !isOpen);
   }
-  logout(): void {}
+
+  closeUserMenu() {
+    this.isUserMenuOpen.set(false);
+  }
 }

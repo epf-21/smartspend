@@ -17,41 +17,47 @@ import { Sidebar } from './shared/components/sidebar/sidebar';
       ></app-sidebar>
 
       <div
-        class="transition-all duration-300 ease-in-out"
-        [class.ml-72]="!isMobile() && sidebarOpen()"
-        [class.ml-0]="isMobile() && sidebarOpen()"
+        class="transition-all duration-300 ease-in-out min-h-screen"
+        [class]="getMainContentClasses()"
       >
-        <main class="min-h-screen">
+        <main>
           <router-outlet></router-outlet>
         </main>
       </div>
       @if (sidebarOpen() && isMobile()) {
-        <div (click)="closeSidebar()" class="fixed inset-0 bg-back opacity-50 z-30 lg:hidden"></div>
+        <div
+          (click)="closeSidebar()"
+          class="fixed inset-0 bg-black opacity-50 z-30 lg:hidden"
+        ></div>
       }
     </div>
   `,
 })
 export class App {
   title = 'SmartSpend';
-  sidebarOpen = signal(false);
+  sidebarOpen = signal(true);
   isMobile = signal(false);
 
   constructor() {
-    this.chechIfMobile();
+    this.checkIfMobile();
   }
 
   @HostListener('window:resize')
   onResize() {
-    this.chechIfMobile();
+    this.checkIfMobile();
   }
 
-  private chechIfMobile() {
-    this.isMobile.set(window.innerWidth < 1024);
+  private checkIfMobile() {
+    const wasMobile = this.isMobile();
+    const isCurrentlyMobile = window.innerWidth < 1024;
+    this.isMobile.set(isCurrentlyMobile);
 
-    if (this.isMobile()) {
-      this.sidebarOpen.set(false);
-    } else {
-      this.sidebarOpen.set(true);
+    if (wasMobile !== isCurrentlyMobile) {
+      if (isCurrentlyMobile) {
+        this.sidebarOpen.set(false);
+      } else {
+        this.sidebarOpen.set(true);
+      }
     }
   }
 
@@ -66,6 +72,17 @@ export class App {
   onMenuItemSelected(itemId: string) {
     if (this.isMobile()) {
       this.closeSidebar();
+    }
+  }
+
+  getMainContentClasses() {
+    const isMobileDevice = this.isMobile();
+    const sidebarIsOpen = this.sidebarOpen();
+
+    if (isMobileDevice) {
+      return 'ml-0';
+    } else {
+      return sidebarIsOpen ? 'ml-72' : 'ml-0';
     }
   }
 }

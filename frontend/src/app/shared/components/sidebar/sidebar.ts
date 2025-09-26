@@ -69,10 +69,18 @@ export class Sidebar {
 
   onMenuItemClick(item: MenuItem) {
     this.menuItemSelected.emit(item.id);
-    this.onCloseSidebar();
   }
 
   onCloseSidebar() {
     this.closeSidebar.emit();
+  }
+
+  getSidebarClasses() {
+    const isVisible = this.isOpen();
+    if (isVisible) {
+      return 'translate-x-0';
+    } else {
+      return '-translate-x-full';
+    }
   }
 }
