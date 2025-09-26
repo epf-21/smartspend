@@ -3,7 +3,7 @@ from sqlmodel import Session, col, func, select
 from uuid import UUID
 from datetime import datetime
 from app.models import Transaction
-from app.schemas import TransactionCreate, TransactionResponse
+from app.schemas import TransactionCreate, TransactionResponse, TransactionUpdate
 from app.database import get_db_session
 
 router = APIRouter()
@@ -40,6 +40,40 @@ def get_transaction(transaction_id: UUID, session: Session = Depends(get_db_sess
             status_code=status.HTTP_404_NOT_FOUND, detail="transaction not found"
         )
     return transaction
+
+
+@router.put("/transactions/{transaction_id}", response_model=TransactionResponse)
+def update_transaction(
+    transaction_id: UUID,
+    transaction_update: TransactionUpdate,
+    session: Session = Depends(get_db_session),
+):
+    transaction = session.get(Transaction, transaction_id)
+    if not transaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found"
+        )
+    transaction_data = transaction_update.model_dump(exclude_unset=True)
+    for key, value in transaction_data.items():
+        setattr(transaction, key, value)
+    session.add(transaction)
+    session.commit()
+    session.refresh(transaction)
+    return transaction
+
+
+@router.delete("/transactions/{transaction_id}")
+def delete_transaction(
+    transaction_id: UUID, session: Session = Depends(get_db_session)
+):
+    transaction = session.get(Transaction, transaction_id)
+    if not transaction:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Transaction not found"
+        )
+    session.delete(transaction)
+    session.commit()
+    return {"message": "Transaction deleted successfully"}
 
 
 @router.get("/transactions/user/{user_id}", response_model=list[TransactionResponse])
