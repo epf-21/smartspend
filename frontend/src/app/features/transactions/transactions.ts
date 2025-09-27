@@ -1,5 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { LucideAngularModule, Receipt } from 'lucide-angular';
+import {
+  ArrowDown,
+  Calendar,
+  Clipboard,
+  DollarSign,
+  LucideAngularModule,
+  Receipt,
+} from 'lucide-angular';
 import { TransactionsHeader } from './transactions-header/transactions-header';
 import { TransactionsFilters } from './transactions-filters/transactions-filters';
 import { TransactionServices } from '../../core/services/transaction';
@@ -23,6 +30,10 @@ import { TransactionModal } from './transaction-modal/transaction-modal';
 })
 export class TransactionsComponent {
   readonly Receipt = Receipt;
+  readonly ArrowDown = ArrowDown;
+  readonly Clipboard = Clipboard;
+  readonly DollarSign = DollarSign;
+  readonly Calendar = Calendar;
 
   private transactionService = inject(TransactionServices);
 
