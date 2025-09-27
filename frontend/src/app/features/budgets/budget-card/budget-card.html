@@ -28,19 +28,29 @@
       <span class="text-sm font-medium text-gray-700">Progreso</span>
       <span class="text-sm text-gray-500">{{ getProgressPercentage() }}%</span>
     </div>
-    <div class="w-full bg-gray-200 rounded-full h-2">
-      <div
-        class="h-2 rounded-full transition-all duration-300"
-        [class]="getProgressBarClass()"
-        [style.width.%]="getProgressPercentage()"
-      ></div>
-    </div>
+    @if (isLoadingExpenses()) {
+      <div class="w-full bg-gray-200 rounded-full h-2 animate-pulse">
+        <div class="h-2 bg-gray-400 rounded-full w-1/3"></div>
+      </div>
+    } @else {
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div
+          class="h-2 rounded-full transition-all duration-500"
+          [class]="getProgressBarClass()"
+          [style.width.%]="getProgressBarWidth()"
+        ></div>
+      </div>
+    }
     <div class="flex items-center justify-between mt-1">
+      <span class="text-xs text-gray-500"> Gastado: {{ getExpenseDisplayText() }} </span>
       <span class="text-xs text-gray-500">
-        Gastado: ${{ getSpentAmount() | number: '1.2-2' }}
-      </span>
-      <span class="text-xs text-gray-500">
-        Restante: ${{ getRemainingAmount() | number: '1.2-2' }}
+        @if (isLoadingExpenses()) {
+          Cargando...
+        } @else if (hasErrorLoadingExpenses()) {
+          Error
+        } @else {
+          Restante: ${{ getRemainingAmount() | number: '1.2-2' }}
+        }
       </span>
     </div>
   </div>
@@ -55,15 +65,23 @@
     </div>
   </div>
 
-  @if (getProgressPercentage() > 90) {
+  @if (hasErrorLoadingExpenses()) {
+    <div class="mb-4 p-2 bg-orange-50 rounded-lg flex items-center gap-2">
+      <i-lucide [img]="TriangleAlert" class="w-4 h-4 text-orange-500"></i-lucide>
+      <span class="text-sm text-orange-700">
+        Error al cargar los gastos. Los datos pueden no estar actualizados.
+      </span>
+    </div>
+  } @else if (showBudgetWarning()) {
     <div class="mb-4 p-2 bg-red-50 rounded-lg flex items-center gap-2">
       <i-lucide [img]="TriangleAlert" class="w-4 h-4 text-red-500"></i-lucide>
       <span class="text-sm text-red-700">
-        {{ getProgressPercentage() >= 100 ? 'Presupuesto excedido' : 'Cerca del límite' }}
+        {{ getBudgetWarningMessage() }}
       </span>
     </div>
   }
 
+  <!-- Actions -->
   <div class="flex gap-2">
     <button
       (click)="onEdit()"

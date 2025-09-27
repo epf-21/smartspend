@@ -44,7 +44,7 @@ export class TransactionServices {
   }
 
   getTransactionsSummaryWithCategory(id: string): Observable<TransactionSummary> {
-    return this.api.get<TransactionSummary>(`category/${id}/summary`);
+    return this.api.get<TransactionSummary>(`transactions/category/${id}/summary`);
   }
 
   getTransactionsByCategory(categoryId: string): Observable<Transaction[]> {
