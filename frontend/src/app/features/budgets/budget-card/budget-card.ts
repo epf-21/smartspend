@@ -1,7 +1,6 @@
 import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
 import {
   Calendar,
-  DollarSign,
   LucideAngularModule,
   Pencil,
   Trash,
@@ -22,7 +21,6 @@ export class BudgetCard {
   readonly Pencil = Pencil;
   readonly Trash = Trash;
   readonly Calendar = Calendar;
-  readonly DollarSign = DollarSign;
   readonly TrendingUp = TrendingUp;
   readonly TriangleAlert = TriangleAlert;
 

@@ -1,10 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import {
   ChartNoAxesCombined,
+  CircleSlash2,
   DollarSign,
   LucideAngularModule,
   PiggyBank,
-  TriangleAlert,
+  Target,
+  TrendingUp,
 } from 'lucide-angular';
 import { BudgetHeader } from './budget-header/budget-header';
 import { BudgetGrid } from './budget-grid/budget-grid';
@@ -22,8 +24,10 @@ import { BugetModal } from './budget-modal/budget-modal';
 export class BudgetsComponent {
   readonly PiggyBank = PiggyBank;
   readonly DollarSing = DollarSign;
-  readonly TriangleAlert = TriangleAlert;
+  readonly CircleSlash2 = CircleSlash2;
   readonly ChartNoAxesCombined = ChartNoAxesCombined;
+  readonly Target = Target;
+  readonly TrendingUp = TrendingUp;
 
   private budgetService = inject(BudgetService);
 
@@ -54,8 +58,10 @@ export class BudgetsComponent {
     return this.budgets().filter((budget) => budget.is_active).length;
   }
 
-  getBudgetsNearLimit() {
-    return Math.floor(this.budgets().length * 0.3);
+  getAverageBudget() {
+    const budgets = this.budgets();
+    if (budgets.length === 0) return 0;
+    return this.getTotalBudgeted() / budgets.length;
   }
 
   openCreateModal() {
