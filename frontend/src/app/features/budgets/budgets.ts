@@ -4,7 +4,6 @@ import {
   CircleSlash2,
   DollarSign,
   LucideAngularModule,
-  PiggyBank,
   Target,
   TrendingUp,
 } from 'lucide-angular';
@@ -19,10 +18,8 @@ import { BugetModal } from './budget-modal/budget-modal';
   selector: 'app-budgets',
   imports: [CommonModule, LucideAngularModule, BudgetHeader, BudgetGrid, BugetModal],
   templateUrl: './budgets.html',
-  styles: ``,
 })
 export class BudgetsComponent {
-  readonly PiggyBank = PiggyBank;
   readonly DollarSing = DollarSign;
   readonly CircleSlash2 = CircleSlash2;
   readonly ChartNoAxesCombined = ChartNoAxesCombined;
