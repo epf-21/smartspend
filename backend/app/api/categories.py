@@ -5,7 +5,7 @@ from app.database import get_db_session
 from app.models import Category
 from app.schemas import CategoryCreate, CategoryUpdate, CategoryResponse
 
-router = APIRouter()
+router = APIRouter(tags=["category"])
 
 
 @router.post(

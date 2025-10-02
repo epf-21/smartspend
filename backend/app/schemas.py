@@ -1,6 +1,6 @@
 from datetime import datetime
 from uuid import UUID
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from app.models import BudgetPeriodEnum, CurrencyEnum, PaymentMethodEnum
 
@@ -16,6 +16,12 @@ class UserCreate(UserBase):
         ..., min_length=6, description="Password must be at least 6 characters"
     )
 
+    @field_validator("password")
+    def password_length(cls, v):
+        if len(v.encode("utf-8")) > 72:
+            raise ValueError("Password to long (max 72 bytes)")
+        return v
+
 
 class UserUpdate(BaseModel):
     email: EmailStr | None = None
@@ -26,13 +32,20 @@ class UserUpdate(BaseModel):
     )
 
 
-class UserResponse(BaseModel):
+class UserResponse(UserBase):
     id: UUID
-    updated_at: datetime
-    created_at: datetime
 
     class Config:
         from_attributes = True
+
+
+class Token(BaseModel):
+    access_token: str
+
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
 
 
 class CategoryBase(BaseModel):

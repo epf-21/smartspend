@@ -6,7 +6,7 @@ from app.models import Transaction
 from app.schemas import TransactionCreate, TransactionResponse, TransactionUpdate
 from app.database import get_db_session
 
-router = APIRouter()
+router = APIRouter(tags=["transaction"])
 
 
 @router.post(

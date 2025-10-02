@@ -5,7 +5,7 @@ from app.models import Budget, Category
 from app.schemas import BudgetCreate, BudgetResponse, BudgetUpdate
 from app.database import get_db_session
 
-router = APIRouter()
+router = APIRouter(tags=["category"])
 
 
 @router.post(

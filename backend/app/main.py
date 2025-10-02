@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from app.api import categories, budgets, transactions
+from app.api import auth, categories, budgets, transactions
 from app.database import init_db
 
 
@@ -31,6 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router, prefix="/api")
 app.include_router(categories.router, prefix="/api")
 app.include_router(budgets.router, prefix="/api")
 app.include_router(transactions.router, prefix="/api")
