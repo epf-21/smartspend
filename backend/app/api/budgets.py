@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select, and_
 from uuid import UUID
-from app.models import Budget, Category
+from app.models import Budget, Category, User
 from app.schemas import BudgetCreate, BudgetResponse, BudgetUpdate
 from app.database import get_db_session
+from app.security import get_current_user
 
 router = APIRouter(tags=["category"])
 
@@ -11,18 +12,32 @@ router = APIRouter(tags=["category"])
 @router.post(
     "/budgets", response_model=BudgetResponse, status_code=status.HTTP_201_CREATED
 )
-def create_budget(budget: BudgetCreate, session: Session = Depends(get_db_session)):
+def create_budget(
+    budget: BudgetCreate,
+    session: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_user),
+):
     category = session.get(Category, budget.category_id)
+
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
         )
+
+    if category.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to use this category",
+        )
     existing_budget = session.exec(
-        select(Budget).where(
+        select(Budget)
+        .join(Category)
+        .where(
             and_(
                 Budget.category_id == budget.category_id,
                 Budget.period == budget.period,
                 Budget.is_active,
+                category.user_id == current_user.id,
             )
         )
     ).first()
@@ -45,9 +60,10 @@ def get_budgets(
     limit: int = 20,
     is_active: bool | None = None,
     session: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_user),
 ):
 
-    query = select(Budget)
+    query = select(Budget).join(Category).where(Category.user_id == current_user.id)
     if is_active is not None:
         query = query.where(Budget.is_active == is_active)
 
@@ -56,13 +72,25 @@ def get_budgets(
 
 
 @router.get("/budgets/{budget_id}", response_model=BudgetResponse)
-def get_budget(budget_id: UUID, session: Session = Depends(get_db_session)):
+def get_budget(
+    budget_id: UUID,
+    session: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_user),
+):
     budget = session.get(Budget, budget_id)
     if not budget:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found",
         )
 
+    category = session.get(Category, budget.category_id)
+
+    if not category or category.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to access this budget",
+        )
     return budget
 
 
@@ -71,16 +99,31 @@ def update_budget(
     budget_id: UUID,
     budget_update: BudgetUpdate,
     session: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_user),
 ):
 
     budget = session.get(Budget, budget_id)
     if not budget:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found"
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Budget not found",
         )
-    if budget_update.category_id != budget.category_id:
+    category = session.get(Category, budget.category_id)
+
+    if not category or category.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to update this budget",
+        )
+
+    if budget_update.category_id and budget_update.category_id != budget.category_id:
         new_category = session.get(Category, budget_update.category_id)
         if not new_category:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Category not found",
+            )
+        if new_category.user_id != current_user.id:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Not authorized to use this category",
@@ -97,11 +140,22 @@ def update_budget(
 
 
 @router.delete("/budgets/{budget_id}")
-def delete_budget(budget_id: UUID, session: Session = Depends(get_db_session)):
+def delete_budget(
+    budget_id: UUID,
+    session: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_user),
+):
     budget = session.get(Budget, budget_id)
     if not budget:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Budget not found"
+        )
+    category = session.get(Category, budget.category_id)
+
+    if not category or category.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to deteled this budget",
         )
     session.delete(budget)
     session.commit()
@@ -109,11 +163,20 @@ def delete_budget(budget_id: UUID, session: Session = Depends(get_db_session)):
 
 
 @router.get("/budgets/category/{category_id}", response_model=list[BudgetResponse])
-def budgets_by_category(category_id: UUID, session: Session = Depends(get_db_session)):
+def budgets_by_category(
+    category_id: UUID,
+    session: Session = Depends(get_db_session),
+    current_user: User = Depends(get_current_user),
+):
     category = session.get(Category, category_id)
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
         )
-    budgets = category.budgets
+    if category.user_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized to access this category",
+        )
+    budgets = session.exec(select(Budget).where(Budget.category_id == category_id)).all
     return budgets
