@@ -65,7 +65,7 @@ class Category(SQLModel, table=True):
     name: str
     color: str = Field(default="#6366F1")
     icon: str = Field(default="")
-    user_id: UUID | None = Field(default=None, foreign_key="user.id")
+    user_id: UUID = Field(default=None, foreign_key="user.id")
 
     created_at: datetime = Field(
         sa_column=Column(
@@ -79,7 +79,7 @@ class Category(SQLModel, table=True):
             onupdate=lambda: datetime.now(timezone.utc),
         )
     )
-    user: User | None = Relationship(back_populates="categories")
+    user: User = Relationship(back_populates="categories")
     transactions: List["Transaction"] = Relationship(
         back_populates="category", cascade_delete=True
     )
@@ -109,10 +109,10 @@ class Transaction(SQLModel, table=True):
         )
     )
     category_id: UUID = Field(foreign_key="category.id")
-    user_id: UUID | None = Field(default=None, foreign_key="user.id")
+    user_id: UUID = Field(default=None, foreign_key="user.id")
 
     category: Category = Relationship(back_populates="transactions")
-    user: User | None = Relationship(back_populates="transactions")
+    user: User = Relationship(back_populates="transactions")
 
 
 class Budget(SQLModel, table=True):
