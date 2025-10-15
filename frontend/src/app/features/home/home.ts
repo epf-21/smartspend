@@ -1,6 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Activity, ArrowRight, LucideAngularModule, PiggyBank, TrendingUp } from 'lucide-angular';
+import {
+  ArrowRight,
+  ChartBar,
+  Check,
+  LucideAngularModule,
+  PiggyBank,
+  Shield,
+  TrendingUp,
+} from 'lucide-angular';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +18,9 @@ import { Activity, ArrowRight, LucideAngularModule, PiggyBank, TrendingUp } from
 export class Home {
   readonly PiggyBank = PiggyBank;
   readonly TrendingUp = TrendingUp;
-  readonly Activity = Activity;
+  readonly Shield = Shield;
+  readonly BarChart3 = ChartBar;
+  readonly Check = Check;
   readonly ArrowRight = ArrowRight;
 
   private router = inject(Router);

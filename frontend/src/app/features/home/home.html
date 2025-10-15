@@ -5,12 +5,18 @@
         <i-lucide [img]="PiggyBank" class="w-8 h-8"></i-lucide>
         SmartSpend
       </div>
-      <div class="flex">
+      <div class="flex items-center gap-4">
         <button
           (click)="goToDashboard()"
           class="px-6 py-2 text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200"
         >
           Iniciar Sesión
+        </button>
+        <button
+          (click)="goToDashboard()"
+          class="px-6 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-xl hover:from-indigo-700 hover:to-indigo-800 font-medium transition-all duration-200 shadow-lg hover:shadow-xl"
+        >
+          Empezar Gratis
         </button>
       </div>
     </div>
@@ -21,6 +27,12 @@
   <div class="max-w-7xl mx-auto px-6">
     <div class="grid lg:grid-cols-2 gap-12 items-center">
       <div class="space-y-8">
+        <div
+          class="inline-block px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium"
+        >
+          🎉 Tu aliado financiero personal
+        </div>
+
         <h1 class="text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
           Controla tus
           <span
@@ -36,7 +48,7 @@
           financieras informadas. Todo en una sola plataforma.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <div class="flex flex-col sm:flex-row gap-4">
           <button
             (click)="goToDashboard()"
             class="group flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-2xl hover:from-indigo-700 hover:to-indigo-800 font-semibold text-lg transition-all duration-200 shadow-xl hover:shadow-2xl hover:scale-105"
@@ -47,6 +59,27 @@
               class="w-5 h-5 group-hover:translate-x-1 transition-transform"
             ></i-lucide>
           </button>
+
+          <button
+            class="px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-2xl hover:border-indigo-600 hover:text-indigo-600 font-semibold text-lg transition-all duration-200"
+          >
+            Ver Demo
+          </button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200">
+          <div>
+            <p class="text-3xl font-bold text-indigo-600">500+</p>
+            <p class="text-sm text-gray-600">Usuarios activos</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-indigo-600">$50M</p>
+            <p class="text-sm text-gray-600">Gestionados</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold text-indigo-600">4.9</p>
+            <p class="text-sm text-gray-600">Rating promedio</p>
+          </div>
         </div>
       </div>
 
@@ -69,7 +102,7 @@
               class="flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl"
             >
               <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
-                <i-lucide [img]="Activity" class="w-6 h-6 text-white"></i-lucide>
+                <i-lucide [img]="BarChart3" class="w-6 h-6 text-white"></i-lucide>
               </div>
               <div>
                 <p class="text-sm text-gray-600">Presupuestos activos</p>
@@ -95,3 +128,123 @@
     </div>
   </div>
 </section>
+
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">
+        Todo lo que necesitas para gestionar tu dinero
+      </h2>
+      <p class="text-xl text-gray-600">
+        Herramientas poderosas diseñadas para simplificar tu vida financiera
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+        class="group p-8 bg-gradient-to-br from-indigo-50 to-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="w-14 h-14 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+        >
+          <i-lucide [img]="PiggyBank" class="w-7 h-7 text-white"></i-lucide>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Presupuestos Inteligentes</h3>
+        <p class="text-gray-600 mb-4">
+          Establece límites por categoría y recibe alertas antes de exceder tu presupuesto.
+        </p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-gray-600">
+            <i-lucide [img]="Check" class="w-4 h-4 text-indigo-600"></i-lucide>
+            Alertas en tiempo real
+          </li>
+          <li class="flex items-center gap-2 text-sm text-gray-600">
+            <i-lucide [img]="Check" class="w-4 h-4 text-indigo-600"></i-lucide>
+            Múltiples períodos
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="group p-8 bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+        >
+          <i-lucide [img]="BarChart3" class="w-7 h-7 text-white"></i-lucide>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Reportes Detallados</h3>
+        <p class="text-gray-600 mb-4">
+          Visualiza tus patrones de gasto con gráficos interactivos y reportes personalizados.
+        </p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-gray-600">
+            <i-lucide [img]="Check" class="w-4 h-4 text-purple-600"></i-lucide>
+            Gráficos interactivos
+          </li>
+          <li class="flex items-center gap-2 text-sm text-gray-600">
+            <i-lucide [img]="Check" class="w-4 h-4 text-purple-600"></i-lucide>
+            Exportación de datos
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="group p-8 bg-gradient-to-br from-emerald-50 to-white rounded-2xl border border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+      >
+        <div
+          class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+        >
+          <i-lucide [img]="Shield" class="w-7 h-7 text-white"></i-lucide>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-3">Seguro y Privado</h3>
+        <p class="text-gray-600 mb-4">
+          Tus datos están encriptados y protegidos con los más altos estándares de seguridad.
+        </p>
+        <ul class="space-y-2">
+          <li class="flex items-center gap-2 text-sm text-gray-600">
+            <i-lucide [img]="Check" class="w-4 h-4 text-emerald-600"></i-lucide>
+            Encriptación end-to-end
+          </li>
+          <li class="flex items-center gap-2 text-sm text-gray-600">
+            <i-lucide [img]="Check" class="w-4 h-4 text-emerald-600"></i-lucide>
+            Sin venta de datos
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 bg-gradient-to-br from-indigo-600 to-purple-600">
+  <div class="max-w-4xl mx-auto px-6 text-center">
+    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+      ¿Listo para tomar control de tus finanzas?
+    </h2>
+    <p class="text-xl text-indigo-100 mb-8">
+      Únete a cientos de usuarios que ya están mejorando su salud financiera
+    </p>
+    <button
+      (click)="goToDashboard()"
+      class="inline-flex items-center gap-2 px-10 py-5 bg-white text-indigo-600 rounded-2xl hover:bg-gray-50 font-bold text-lg transition-all duration-200 shadow-2xl hover:shadow-3xl hover:scale-105"
+    >
+      Empezar gratis ahora
+      <i-lucide [img]="ArrowRight" class="w-5 h-5"></i-lucide>
+    </button>
+    <p class="mt-4 text-sm text-indigo-200">
+      No se requiere tarjeta de crédito • Configuración en 2 minutos
+    </p>
+  </div>
+</section>
+
+<footer class="bg-gray-900 text-gray-400 py-12">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <div class="flex items-center gap-2 text-white font-bold text-xl mb-4 md:mb-0">
+        <i-lucide [img]="PiggyBank" class="w-6 h-6"></i-lucide>
+        SmartSpend
+      </div>
+      <p class="text-sm">© 2024 SmartSpend. Todos los derechos reservados.</p>
+    </div>
+  </div>
+</footer>

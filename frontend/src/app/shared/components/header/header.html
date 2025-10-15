@@ -4,11 +4,13 @@
       <button
         (click)="onToggleSidebar()"
         class="lg:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-all duration-200"
+        type="button"
+        aria-label="Toggle navigation menu"
       >
         <i-lucide [img]="Menu"></i-lucide>
       </button>
 
-      <div class="flex items-center gap-2 text-indigo-600 font-bold text-xl">
+      <div class="lg:hidden flex items-center gap-2 text-indigo-600 font-bold text-xl">
         <i-lucide [img]="FolderCog"></i-lucide>
         SmartSpend
       </div>
@@ -22,31 +24,62 @@
           type="button"
           aria-label="User menu"
         >
-          <i-lucide [img]="CircleUser"></i-lucide>
-          <span class="hidden md:block">User Name</span>
-          <i-lucide [img]="ChevronDown"></i-lucide>
+          <div class="hidden md:flex items-center gap-2">
+            <div
+              class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-full flex items-center justify-center"
+            >
+              <span class="text-white text-sm font-semibold">
+                {{ getUserInitials() }}
+              </span>
+            </div>
+            <div class="text-left">
+              <p class="text-sm font-semibold text-gray-900">{{ currentUser()?.full_name }}</p>
+              <p class="text-xs text-gray-500">{{ currentUser()?.email }}</p>
+            </div>
+          </div>
+          <div class="md:hidden">
+            <i-lucide [img]="CircleUser"></i-lucide>
+          </div>
+          <i-lucide
+            [img]="ChevronDown"
+            class="w-4 h-4 transition-transform duration-200"
+            [class.rotate-180]="isUserMenuOpen()"
+          ></i-lucide>
         </button>
 
         @if (isUserMenuOpen()) {
           <div
-            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-[60]"
+            class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-[60] overflow-hidden"
           >
+            <div class="md:hidden px-4 py-3 border-b border-gray-100">
+              <p class="text-sm font-semibold text-gray-900">{{ currentUser()?.full_name }}</p>
+              <p class="text-xs text-gray-500">{{ currentUser()?.email }}</p>
+            </div>
+
             <a
               href="#"
+              (click)="closeUserMenu()"
+              class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 transition-colors duration-150"
+            >
+              <i-lucide [img]="UserIcon" class="w-4 h-4"></i-lucide>
+              Mi perfil
+            </a>
+            <a
+              href="#"
+              (click)="closeUserMenu()"
               class="flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 transition-colors duration-150"
             >
               <i-lucide [img]="Cog" class="w-4 h-4"></i-lucide>
               Configuración
             </a>
             <div class="border-t border-slate-200 my-1"></div>
-            <a
-              href="#"
-              (click)="closeUserMenu()"
-              class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
+            <button
+              (click)="onLogout()"
+              class="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-150"
             >
               <i-lucide [img]="LogOut" class="w-4 h-4"></i-lucide>
-              Cerrar Sesión
-            </a>
+              Cerrar sesión
+            </button>
           </div>
         }
       </div>
