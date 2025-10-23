@@ -35,28 +35,16 @@ export class Register {
   errorMessage = signal<string | null>(null);
 
   constructor() {
-    this.registerForm = this.fb.group(
-      {
-        full_name: ['', [Validators.required, Validators.minLength(3)]],
-        email: ['', [Validators.required, Validators.email]],
-        currency: ['BOB', [Validators.required]],
-        password: ['', [Validators.required, Validators.minLength(6)]],
-        confirmPassword: ['', [Validators.required]],
-      },
-      {
-        validators: this.passwordMatchValidator,
-      },
-    );
+    this.registerForm = this.fb.group({
+      full_name: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      currency: ['BOB', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+    });
 
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/dashboard']);
     }
-  }
-
-  passwordMatchValidator(g: FormGroup) {
-    const password = g.get('password')?.value;
-    const confirmPassword = g.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
   }
 
   onSubmit() {
@@ -64,7 +52,7 @@ export class Register {
       this.isLoading.set(true);
       this.errorMessage.set(null);
 
-      const { confirmPassword, ...registerData } = this.registerForm.value;
+      const registerData = this.registerForm.value;
       console.log(registerData);
       this.authService.register(registerData).subscribe({
         next: () => {
