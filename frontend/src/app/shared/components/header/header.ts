@@ -8,6 +8,7 @@ import {
   Cog,
   LogOut,
   User,
+  PiggyBank,
 } from 'lucide-angular';
 import { Auth } from '../../../core/services/auth';
 
@@ -24,6 +25,7 @@ export class Header {
   readonly Cog = Cog;
   readonly LogOut = LogOut;
   readonly UserIcon = User;
+  readonly PiggyBank = PiggyBank;
 
   private authService = inject(Auth);
 
