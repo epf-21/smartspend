@@ -14,7 +14,7 @@ import { Auth } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-register',
-  imports: [LucideAngularModule, ReactiveFormsModule],
+  imports: [LucideAngularModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.html',
   styles: ``,
 })

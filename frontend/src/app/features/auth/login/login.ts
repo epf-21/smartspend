@@ -2,11 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CircleAlert, Lock, LucideAngularModule, Mail, PiggyBank } from 'lucide-angular';
 import { Auth } from '../../../core/services/auth';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [LucideAngularModule, ReactiveFormsModule],
+  imports: [LucideAngularModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styles: ``,
 })
