@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { Api } from './api';
 import { Router } from '@angular/router';
 import { LoginRequest, RegisterRequest, Token, User } from '../models';
@@ -10,15 +10,28 @@ import { Observable, tap } from 'rxjs';
 export class Auth {
   private api = inject(Api);
   private router = inject(Router);
-  private tokenSignal = signal<string | null>(null);
-  private userSignal = signal<User | null>(null);
 
-  token = computed(() => this.tokenSignal());
-  user = computed(() => this.userSignal());
-  isAuthenticated = computed(() => !!this.tokenSignal() && !!this.userSignal());
+  private currentUser = signal<User | null>(null);
+  private token = signal<string | null>(null);
+
+  user = this.currentUser.asReadonly();
+  isAuthenticated = computed(() => !!this.currentUser());
 
   constructor() {
-    this.loadStoredAuth();
+    this.loadAuthState();
+
+    effect(() => {
+      const user = this.currentUser();
+      const token = this.token();
+
+      if (user && token) {
+        localStorage.setItem('auth_user', JSON.stringify(user));
+        localStorage.setItem('auth_token', token);
+      } else {
+        localStorage.removeItem('auth_user');
+        localStorage.removeItem('auth_token');
+      }
+    });
   }
 
   register(data: RegisterRequest): Observable<Token> {
@@ -40,7 +53,7 @@ export class Auth {
   }
 
   loadCurrentUser() {
-    if (!this.tokenSignal()) return;
+    if (!this.token()) return;
     this.api.get<User>('me').subscribe({
       next: (user) => {
         this.setUser(user);
@@ -61,51 +74,34 @@ export class Auth {
   }
 
   logout() {
-    this.clearAuthData();
+    this.currentUser.set(null);
     this.router.navigate(['/']);
   }
 
+  getToken(): string | null {
+    return this.token();
+  }
+
   private setToken(token: string) {
-    this.tokenSignal.set(token);
+    this.token.set(token);
     localStorage.setItem('auth_token', token);
   }
 
   private setUser(user: User) {
-    this.userSignal.set(user);
+    this.currentUser.set(user);
     localStorage.setItem('auth_user', JSON.stringify(user));
   }
 
-  private clearAuthData() {
-    this.tokenSignal.set(null);
-    this.userSignal.set(null);
-    localStorage.removeItem('auth_token');
-    localStorage.removeItem('auth_user');
-  }
-
-  private loadStoredAuth() {
-    const token = this.getStoredToken();
-    const user = this.getStoredUser();
-
-    if (token && user) {
-      this.tokenSignal.set(token);
-      this.userSignal.set(user);
-    }
-  }
-
-  private getStoredToken() {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('auth_toekn');
-  }
-
-  private getStoredUser() {
-    if (typeof window === 'undefined') return null;
-    const userStr = localStorage.getItem('auth_user');
-    if (!userStr) return null;
+  private loadAuthState() {
     try {
-      return JSON.parse(userStr);
-    } catch {
-      return null;
-    }
+      const storedUser = localStorage.getItem('auth_user');
+      const storedToken = localStorage.getItem('auth_token');
+
+      if (storedToken && storedUser) {
+        this.currentUser.set(JSON.parse(storedUser));
+        this.token.set(storedToken);
+      }
+    } catch {}
   }
 
   hasValidSession() {

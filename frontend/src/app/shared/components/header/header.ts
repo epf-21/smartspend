@@ -61,7 +61,7 @@ export class Header {
 
   getUserInitials() {
     const user = this.currentUser();
-    if (!user) return '??';
+    if (!user || !user.full_name) return '??';
 
     const names = user.full_name.split(' ');
     if (names.length >= 2) {
