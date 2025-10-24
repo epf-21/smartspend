@@ -9,11 +9,18 @@ import {
   Shield,
   TrendingUp,
 } from 'lucide-angular';
+import { HomeHeader } from './home-header/home-header';
+import { HomeSection } from './home-section/home-section';
+import { HomeFooter } from './home-footer/home-footer';
 
 @Component({
   selector: 'app-home',
-  imports: [LucideAngularModule],
-  templateUrl: './home.html',
+  imports: [LucideAngularModule, HomeHeader, HomeSection, HomeFooter],
+  template: `
+    <app-home-header (onGetStarted)="goToDashboard()"></app-home-header>
+    <app-home-section (onGetStarted)="goToDashboard()"></app-home-section>
+    <app-home-footer></app-home-footer>
+  `,
 })
 export class Home {
   readonly PiggyBank = PiggyBank;
